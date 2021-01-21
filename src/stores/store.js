@@ -5,16 +5,16 @@ import { combineReducers } from 'redux';
 import { createStore } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist';
 
-import base from './base/reducer';
+import auth from './auth/reducer';
 
 const persistConfig = {
 	key: 'root',
 	storage,
-	whitelist: ['base'],
+	whitelist: ['auth'],
 };
 
 const rootReducer = combineReducers({
-	base,
+	auth,
 });
 
 export const store = createStore(persistReducer(persistConfig, rootReducer));

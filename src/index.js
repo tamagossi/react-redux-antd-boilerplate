@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
+import { HelmetProvider } from 'react-helmet-async';
 
 import 'antd/dist/antd.css';
 import 'tachyons';
@@ -12,15 +13,15 @@ import reportWebVitals from './reportWebVitals';
 import { persistor, store } from './stores/store';
 
 ReactDOM.render(
-	<React.StrictMode>
-		<Provider store={store}>
-			<BrowserRouter>
-				<PersistGate persistor={persistor}>
+	<Provider store={store}>
+		<BrowserRouter>
+			<PersistGate persistor={persistor}>
+				<HelmetProvider>
 					<App />
-				</PersistGate>
-			</BrowserRouter>
-		</Provider>
-	</React.StrictMode>,
+				</HelmetProvider>
+			</PersistGate>
+		</BrowserRouter>
+	</Provider>,
 	document.getElementById('root')
 );
 

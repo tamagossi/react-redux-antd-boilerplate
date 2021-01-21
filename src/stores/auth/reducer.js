@@ -1,7 +1,6 @@
-import BaseTypes from './types';
+import AuthTypes from './types';
 
 const INITIAL_STATE = {
-	isSiderVisible: true,
 	isLoggedIn: false,
 	token: '',
 	user: {
@@ -10,24 +9,24 @@ const INITIAL_STATE = {
 	},
 };
 
-const baseReducer = (state = INITIAL_STATE, action) => {
+const authReducer = (state = INITIAL_STATE, action) => {
 	switch (action.type) {
-		case BaseTypes.SET_AUTH_TOKEN:
+		case AuthTypes.SET_AUTH_TOKEN:
 			return {
 				...state,
 				token: action.payload,
 			};
-		case BaseTypes.SET_CURRENT_USER:
+		case AuthTypes.SET_CURRENT_USER:
 			return {
 				...state,
 				user: action.payload,
 			};
-		case BaseTypes.SET_LOGIN_STATUS:
+		case AuthTypes.SET_LOGIN_STATUS:
 			return {
 				...state,
 				isLoggedIn: action.payload,
 			};
-		case BaseTypes.SET_SIDER_VISIBILITY:
+		case AuthTypes.SET_SIDER_VISIBILITY:
 			return {
 				...state,
 				isSiderVisible: action.payload,
@@ -37,4 +36,4 @@ const baseReducer = (state = INITIAL_STATE, action) => {
 	}
 };
 
-export default baseReducer;
+export default authReducer;

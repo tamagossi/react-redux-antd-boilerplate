@@ -1,12 +1,49 @@
-import React from 'react';
-import { Col, Row } from 'antd';
-import { Helmet } from 'react-helmet';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Layout, Menu } from 'antd';
+import { useHistory } from 'react-router-dom';
 
-import OrganismSideNavigation from './side-navigation';
+import {
+	DesktopOutlined,
+	PieChartOutlined,
+	TeamOutlined,
+} from '@ant-design/icons';
 
 const OrganismLayout = (props) => {
-	const { isSiderVisible } = useSelector((state) => state.base);
+	const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+	const history = useHistory();
+
+	const menus = [
+		{
+			key: '1',
+			name: 'Option 1',
+			icon: <PieChartOutlined />,
+			link: '/to-some-link-1',
+		},
+		{
+			key: '2',
+			name: 'Option 2',
+			icon: <DesktopOutlined />,
+			link: '/to-some-link-2',
+		},
+		{
+			key: 'Sub 1',
+			name: 'Sub 1',
+			icon: <TeamOutlined />,
+			subMenus: [
+				{
+					key: '3',
+					name: 'Sub Option 1',
+					link: '/to-some-link-3',
+				},
+				{
+					key: '4',
+					name: 'Sub Option 2',
+					link: '/to-some-link-4',
+				},
+			],
+		},
+	];
 
 	return (
 		<>
@@ -14,26 +51,62 @@ const OrganismLayout = (props) => {
 				<title>Fresh Freeze Admin | {props.title || ''}</title>
 			</Helmet>
 
-			<Row>
-				{!props.withoutSideNavigation && (
-					<Col className="vh-100 " span={isSiderVisible ? 5 : 2}>
-						<OrganismSideNavigation />
-					</Col>
-				)}
-
-				<Col
-					className="bg-blue pv4 ph5"
-					span={
-						props.withoutSideNavigation
-							? 24
-							: isSiderVisible
-							? 19
-							: 22
+			<Layout style={{ minHeight: '100vh' }}>
+				<Layout.Sider
+					collapsible
+					collapsed={isSidebarCollapsed}
+					onCollapse={() =>
+						setIsSidebarCollapsed((collapsed) => !collapsed)
 					}
+					width={250}
 				>
-					{props.children}
-				</Col>
-			</Row>
+					<div className="pa2 mv3">
+						<img
+							src="https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo4.jpg"
+							alt="Logo"
+						/>
+					</div>
+
+					<Menu
+						theme="dark"
+						defaultSelectedKeys={['1']}
+						mode="inline"
+					>
+						{menus.map((menu) => {
+							return !menu.subMenus ? (
+								<Menu.Item
+									key={menu.key}
+									icon={menu.icon}
+									onClick={() => history.push(menu.link)}
+								>
+									{menu.name}
+								</Menu.Item>
+							) : (
+								<Menu.SubMenu
+									key={menu.key}
+									icon={menu.icon}
+									title={menu.name}
+								>
+									{menu.subMenus.map((sub) => (
+										<Menu.Item
+											key={sub.key}
+											onClick={() =>
+												history.push(sub.link)
+											}
+										>
+											{sub.name}
+										</Menu.Item>
+									))}
+								</Menu.SubMenu>
+							);
+						})}
+					</Menu>
+				</Layout.Sider>
+
+				<Layout className="site-layout">
+					<div className="ph5 pv4">{props.children}</div>
+				</Layout>
+			</Layout>
 		</>
 	);
 };

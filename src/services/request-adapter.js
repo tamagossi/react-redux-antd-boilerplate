@@ -2,12 +2,12 @@ import axios from 'axios';
 
 import config from '../config';
 import { store } from '../stores/store';
-import { setAuthToken } from '../stores/base/actions';
+import { setAuthToken } from '../stores/auth/actions';
 
 export default class RequestAdapterService {
 	constructor() {
 		const {
-			base: { token },
+			auth: { token },
 		} = store.getState();
 
 		this.baseUrl = config.API_URL;

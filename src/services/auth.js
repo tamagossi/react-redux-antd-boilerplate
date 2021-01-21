@@ -5,7 +5,7 @@ import {
 	setAuthToken,
 	setCurrentUser,
 	setLoginStatus,
-} from '../stores/base/actions';
+} from '../stores/auth/actions';
 
 export default class AuthService extends RequestAdapterService {
 	async login(credential) {
