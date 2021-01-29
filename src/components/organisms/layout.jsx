@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Layout, Menu } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import {
 	DesktopOutlined,
@@ -9,41 +9,42 @@ import {
 	TeamOutlined,
 } from '@ant-design/icons';
 
+const menus = [
+	{
+		key: '1',
+		name: 'Option 1',
+		icon: <PieChartOutlined />,
+		link: '/to-some-link-1',
+	},
+	{
+		key: '2',
+		name: 'Option 2',
+		icon: <DesktopOutlined />,
+		link: '/to-some-link-2',
+	},
+	{
+		subMenuKey: 'Sub 1',
+		name: 'Sub 1',
+		icon: <TeamOutlined />,
+		subMenus: [
+			{
+				key: '3',
+				name: 'Sub Option 1',
+				link: '/to-some-link-3',
+			},
+			{
+				key: '4',
+				name: 'Sub Option 2',
+				link: '/to-some-link-4',
+			},
+		],
+	},
+];
+
 const OrganismLayout = (props) => {
 	const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 	const history = useHistory();
-
-	const menus = [
-		{
-			key: '1',
-			name: 'Option 1',
-			icon: <PieChartOutlined />,
-			link: '/to-some-link-1',
-		},
-		{
-			key: '2',
-			name: 'Option 2',
-			icon: <DesktopOutlined />,
-			link: '/to-some-link-2',
-		},
-		{
-			key: 'Sub 1',
-			name: 'Sub 1',
-			icon: <TeamOutlined />,
-			subMenus: [
-				{
-					key: '3',
-					name: 'Sub Option 1',
-					link: '/to-some-link-3',
-				},
-				{
-					key: '4',
-					name: 'Sub Option 2',
-					link: '/to-some-link-4',
-				},
-			],
-		},
-	];
+	const location = useLocation();
 
 	return (
 		<>
@@ -60,22 +61,20 @@ const OrganismLayout = (props) => {
 					}
 					width={250}
 				>
-					<div className="pa2 mv3">
-						<img
-							src="https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo4.jpg"
-							alt="Logo"
-						/>
+					<div className="pa2 mv3 mh4">
+						<img src={FFLogo} alt="Logo" />
 					</div>
 
 					<Menu
-						theme="dark"
-						defaultSelectedKeys={['1']}
+						defaultOpenKeys={[location.pathname.split('/')[1]]}
+						defaultSelectedKeys={[location.pathname]}
 						mode="inline"
+						theme="dark"
 					>
 						{menus.map((menu) => {
 							return !menu.subMenus ? (
 								<Menu.Item
-									key={menu.key}
+									key={menu.link}
 									icon={menu.icon}
 									onClick={() => history.push(menu.link)}
 								>
@@ -83,13 +82,20 @@ const OrganismLayout = (props) => {
 								</Menu.Item>
 							) : (
 								<Menu.SubMenu
-									key={menu.key}
+									className={
+										location.pathname.includes(
+											menu.subMenyKey
+										)
+											? 'ant-menu-submenu-open'
+											: ''
+									}
+									key={menu.subMenuKey}
 									icon={menu.icon}
 									title={menu.name}
 								>
 									{menu.subMenus.map((sub) => (
 										<Menu.Item
-											key={sub.key}
+											key={sub.link}
 											onClick={() =>
 												history.push(sub.link)
 											}
